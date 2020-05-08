@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections;
+﻿//using System;
+//using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Tank.Service;
@@ -14,11 +14,12 @@ namespace Tank.Controller
         public TankModel TankModel { get; }
         public TankView TankView { get; }
 
-        public TankController(TankModel tankModel, Dictionary<PlayerTankType, TankView> tankPrefab)
+        BulletController bulletController;
+
+        //constructor
+        public TankController(TankModel tankModel, Dictionary<PlayerTankType, TankView> tankPrefab) 
         {
-            Debug.Log("tank controller created");
             TankModel = tankModel;
-            // now here on the basis of what the player has selected as tanktype, need to pass a variable in the tankView array.
             TankView = GameObject.Instantiate<TankView>(tankPrefab[TankModel.TankType]);
             TankView.SetTankController(this);
         }
@@ -40,18 +41,17 @@ namespace Tank.Controller
 
         public void FireBullet(Vector3 position, Vector3 tankRotation)
         {
-            BulletController bulletController = TankService.Instance.GetBullet(position);
+            bulletController = TankService.Instance.GetBullet(position, tankRotation);
             bulletController.FireBullet(tankRotation);
         }
 
-        public void DestroyBullet()
+        public void DestroyTank()
         {
-            TankService.Instance.DestroyBullet();
-        }
-
-        public void DestroyController()
-        {
+            TankView.InstantiateTankExplosionParticleEffect();
+            TankView.DestroyTankPrefab();
+            TankModel.ClearUpAllYourData();
             TankService.Instance.DestroyControllerAndModel();
+            TankService.Instance.DestroyAllEnemies();
         }
     }
 

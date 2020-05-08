@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections;
+﻿//using System;
+//using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Tank.Controller;
@@ -8,6 +8,7 @@ using Tank.Model;
 using Tank.ScriptableObjects;
 using Bullet.Service;
 using Bullet.Controller;
+using Enemy.Service;
 
 namespace Tank.Service
 {
@@ -15,7 +16,7 @@ namespace Tank.Service
     {
         public TankView[] tankView;
         TankModel tankModel;
-        TankController tankController;
+        public TankController TankController { get; private set; }
         Dictionary<PlayerTankType, TankView> tankPrefab = new Dictionary<PlayerTankType, TankView>();
 
         public TankScriptableObject[] tankConfigurations;
@@ -64,27 +65,25 @@ namespace Tank.Service
         {
             TankScriptableObject tankScriptableObject = tankConfigurations[(int)tankType]; // which tank needs to be created 
             tankModel = new TankModel(tankScriptableObject);
-
-            tankController = new TankController(tankModel, tankPrefab);
-            return tankController;
+            TankController = new TankController(tankModel, tankPrefab);
+            return TankController;
         }
 
-        public void DestroyBullet()
+        public BulletController GetBullet(Vector3 position, Vector3 tankRotation)
         {
-            BulletService.Instance.DestroyBullet();
+            BulletController bulletController = BulletService.Instance.PleaseGiveMeBullet(position, tankRotation);
+            return bulletController;
         }
 
         public void DestroyControllerAndModel()
         {
-            Debug.Log("tank controller and model destroyed");
             tankModel = null;
-            tankController = null;
+            TankController = null;
         }
 
-        public BulletController GetBullet(Vector3 position)
+        public void DestroyAllEnemies()
         {
-            BulletController bulletController = BulletService.Instance.PleaseGiveMeBullet(position);
-            return bulletController;
+            StartCoroutine(EnemyService.Instance.DestroyAllEnemies());
         }
     }
 }

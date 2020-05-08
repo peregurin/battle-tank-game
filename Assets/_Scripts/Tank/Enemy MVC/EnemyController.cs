@@ -1,24 +1,26 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿//using System.Collections;
+//using System.Collections.Generic;
 using UnityEngine;
 using Enemy.Service;
 using Enemy.View;
 using Enemy.Model;
-using System;
+//using System;
 using Bullet.Controller;
+
 
 namespace Enemy.Controller
 {
     public class EnemyController
     {
-        public EnemyModel EnemyModel { get; }
+        public EnemyModel EnemyModel { get; private set; }
         public EnemyView EnemyView { get; }
 
-        public EnemyController(EnemyModel enemyModel, EnemyView enemyView)
+        BulletController bulletController;
+
+        public EnemyController(EnemyModel enemyModel, EnemyView enemyView, Vector3 position)
         {
-            Debug.Log("enemy controller created");
             EnemyModel = enemyModel;
-            EnemyView = GameObject.Instantiate<EnemyView>(enemyView);
+            EnemyView = GameObject.Instantiate<EnemyView>(enemyView, position, new Quaternion(0f, 0f, 0f, 0f));
             EnemyView.SetEnemyController(this);
         }
 
@@ -29,18 +31,17 @@ namespace Enemy.Controller
 
         public void FireBullet(Vector3 position, Vector3 tankRotation)
         {
-            BulletController bulletController = EnemyService.Instance.GetBullet(position);
+            bulletController = EnemyService.Instance.GetBullet(position, tankRotation);
             bulletController.FireBullet(tankRotation);
         }
 
-        public void DestroyController()
+        public void DestroyEnemyTank()
         {
+            EnemyView.InstantiateTankExplosionParticleEffect();
+            EnemyView.DestroyEnemyTankPrefab();
+            EnemyModel.ClearUpAllYourData();
             EnemyService.Instance.DestroyControllerAndModel();
-        }
 
-        public void DestroyBullet()
-        {
-            EnemyService.Instance.DestroyBullet();
         }
     }
 }

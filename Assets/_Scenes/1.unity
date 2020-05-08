@@ -200,7 +200,6 @@ MonoBehaviour:
   - {fileID: 5175030929686177053, guid: c88281e3e4f3b6442ae345218736acd6, type: 3}
   - {fileID: 5175030929686177053, guid: c8b389338a1317545957a9a65783e47f, type: 3}
   - {fileID: 5175030929686177053, guid: a635ad6fed0eedd47bfd6b42b1d89ac7, type: 3}
-  BulletService: {fileID: 86234588}
   tankConfigurations:
   - {fileID: 11400000, guid: ea8c94d2267fd3a4299872fedfcef356, type: 2}
   - {fileID: 11400000, guid: f530e5c3ebe4d9845b5f90d2e052a8e6, type: 2}
@@ -251,7 +250,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EnemyView: {fileID: -3101680850424291405, guid: b0a04ecb7da4b094f9e6a1d4c1f43bbd,
     type: 3}
-  BulletService: {fileID: 86234588}
 --- !u!4 &1154068110
 Transform:
   m_ObjectHideFlags: 0
@@ -529,7 +527,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1391056259}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!124 &1391056261
 Behaviour:
   m_ObjectHideFlags: 0
@@ -626,6 +624,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1771596987}
+  - component: {fileID: 1771596988}
   m_Layer: 0
   m_Name: CameraRig
   m_TagString: Untagged
@@ -648,3 +647,15 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1771596988
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1771596986}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e1d9dd34149f104a902698957235fcb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

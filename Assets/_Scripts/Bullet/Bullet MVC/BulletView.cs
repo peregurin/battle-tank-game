@@ -1,20 +1,18 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using Bullet.Controller;
-using Enemy.View;
+using Idamagable;
 
 namespace Bullet.View
 {
     public class BulletView : MonoBehaviour
     {
         BulletController bulletController;
-        //Rigidbody rigidbody;
-        private void Awake()
+
+        public ParticleSystem BulletExplosion;
+
+        public void SetBulletController(BulletController bc)
         {
-            Debug.Log("Bullet View created");
-            //rigidbody = GetComponent<Rigidbody>();
+            bulletController = bc;
         }
 
         private void Update()
@@ -25,39 +23,27 @@ namespace Bullet.View
         public void FireBullet(Vector3 tankRotation)
         {
             transform.eulerAngles = tankRotation;
-
-            //Vector3 position = transform.position; // *** this violates the MVC design pattern . need to find a better way. have to move the logic of firing the bullet inside the bullet controller script.
-            //position.x += bulletController.BulletModel.Speed * Time.deltaTime;
-            //transform.position = position;
-
             transform.position += transform.forward * bulletController.BulletModel.Speed * Time.deltaTime;
-
-            //rigidbody.velocity = transform.forward * bulletController.BulletModel.Speed * Time.deltaTime;
-
-            //transform.Translate(Vector3.forward * bulletController.BulletModel.Speed * Time.deltaTime);
-
-            CheckBulletBounds();
-
         }
 
-        private void CheckBulletBounds()
+        private void OnCollisionEnter(Collision collision)
         {
-            if ((Mathf.Abs(transform.position.x) > 48f) || (Mathf.Abs(transform.position.z) > 48f))
+            if(!(collision.gameObject.GetComponent<IDamagable>() != null))
             {
-                DestroyBullet();
+                InstantiateShellExplosionParticleEffect();
             }
+            bulletController.DestroyBullet();
+
         }
 
-        public void DestroyBullet()
+        private void InstantiateShellExplosionParticleEffect()
         {
-            Debug.Log("bullet view destroyed...");
-            bulletController.DestroyController();
+            Instantiate(BulletExplosion, transform.position, new Quaternion(0f, 0f, 0f, 0f));
+        }
+
+        public void DestroyBulletPrefab()
+        {
             Destroy(gameObject);
-        }
-
-        public void SetBulletController(BulletController bc)
-        {
-            bulletController = bc;
         }
     }
 }

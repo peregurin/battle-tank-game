@@ -1,10 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿//using System.Collections;
+//using System.Collections.Generic;
 using UnityEngine;
 using Bullet.Controller;
 using Bullet.View;
 using Bullet.Model;
-using System;
+//using System;
 
 namespace Bullet.Service
 {
@@ -14,31 +14,24 @@ namespace Bullet.Service
         BulletModel bulletModel;
         BulletController bulletController;
 
-        public BulletController CreateNewBullet(Vector3 position)
+        public BulletController PleaseGiveMeBullet(Vector3 position, Vector3 tankRotation)
         {
-            bulletModel = new BulletModel(30f, 10f, new Vector3(0f, 1.6f, 1.35f)); // total health will be 100
+            BulletController bulletController = CreateNewBullet(position, tankRotation);
+            return bulletController;
+        }
+
+        public BulletController CreateNewBullet(Vector3 position, Vector3 tankRotation)
+        {
+            float RadTankRotation = (tankRotation.y * Mathf.PI) / 180f;
+            bulletModel = new BulletModel(30f, 10f, new Vector3(1.35f * Mathf.Sin(RadTankRotation), 1.6f, 1.35f * Mathf.Cos(RadTankRotation)));
             bulletController = new BulletController(bulletModel, BulletView, position);
             return bulletController;
         }
 
-        public void DestroyBullet()
-        {
-            bulletController.DestroyBulletView();
-        }
-
         public void DestroyControllerAndModel()
         {
-            Debug.Log("bullet controller and model destroyed...");
             bulletModel = null;
             bulletController = null;
         }
-
-        public BulletController PleaseGiveMeBullet(Vector3 position)
-        {
-            BulletController bulletController = CreateNewBullet(position);
-            return bulletController;
-        }
-
-        //bullet model and controller needs to be destroyed inside the service.
     }
 }

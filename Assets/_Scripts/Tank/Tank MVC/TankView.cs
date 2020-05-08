@@ -1,24 +1,31 @@
-﻿using System;
+﻿//using System;
 using System.Collections;
-using System.Collections.Generic;
+//using System.Collections.Generic;
 using UnityEngine;
 using Tank.Controller;
 using Bullet.View;
+using Idamagable;
 
 namespace Tank.View
 {
-    public class TankView : MonoBehaviour
+    public class TankView : MonoBehaviour, IDamagable
     {
-        public PlayerTankType TankType;
+        bool isPlayerDead = false;
         TankController tankController;
+        public ParticleSystem TankExplosion;
 
-        void Start()
+        public void SetTankController(TankController tc)
         {
-            Debug.Log("Tank View created");
+            tankController = tc;
         }
 
         private void Update()
         {
+            if (isPlayerDead)
+            {
+                StartCoroutine(HaltGame());
+            }
+
             float horizontal = Input.GetAxisRaw("Horizontal1");
             float vertical = Input.GetAxisRaw("Vertical1");
             float turnSmoothVelocity = 0f;
@@ -33,34 +40,39 @@ namespace Tank.View
             {
                 tankController.FireBullet(transform.position, transform.eulerAngles);
             }
-
         }
 
         private void OnCollisionEnter(Collision collision)
         {
             if (collision.gameObject.GetComponent<BulletView>() != null)
             {
-                DestroyPlayer();
-                DestroyBullet();
+                isPlayerDead = true;
             }
         }
 
-        private void DestroyBullet()
+        public void InstantiateTankExplosionParticleEffect()
         {
-            tankController.DestroyBullet();
+            Instantiate(TankExplosion, transform.position, new Quaternion(0f, 0f, 0f, 0f));
         }
 
-        private void DestroyPlayer()
+        public void DestroyTankPrefab()
         {
-            Debug.Log("tank view destroyed");
-            tankController.DestroyController();
+            //Debug.Log("isplayerdead = " + isPlayerDead);
             Destroy(gameObject);
         }
 
-        public void SetTankController(TankController tc)
+        public IEnumerator HaltGame() //unable to halt the game.
         {
-            tankController = tc;
+            Time.timeScale = 0.01f;
+            isPlayerDead = false;
+            yield return new WaitForSeconds(0.03f);
+            tankController.DestroyTank();
+            Time.timeScale = 1;
+        }
+
+        public void TakeDamage()
+        {
+            //implementation
         }
     }
-
 }
