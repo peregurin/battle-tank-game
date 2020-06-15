@@ -1,7 +1,4 @@
-﻿//using System;
-//using System.Collections;
-//using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using Bullet.Model;
 using Bullet.View;
 using Bullet.Service;

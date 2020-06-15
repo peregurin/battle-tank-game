@@ -1,10 +1,7 @@
-﻿//using System.Collections;
-//using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using Enemy.Service;
 using Enemy.View;
 using Enemy.Model;
-//using System;
 using Bullet.Controller;
 
 
@@ -12,13 +9,15 @@ namespace Enemy.Controller
 {
     public class EnemyController
     {
+        public float EnemyControllerId;
         public EnemyModel EnemyModel { get; private set; }
         public EnemyView EnemyView { get; }
 
         BulletController bulletController;
 
-        public EnemyController(EnemyModel enemyModel, EnemyView enemyView, Vector3 position)
+        public EnemyController(EnemyModel enemyModel, EnemyView enemyView, Vector3 position, float Id)
         {
+            EnemyControllerId = Id;
             EnemyModel = enemyModel;
             EnemyView = GameObject.Instantiate<EnemyView>(enemyView, position, new Quaternion(0f, 0f, 0f, 0f));
             EnemyView.SetEnemyController(this);
@@ -41,7 +40,6 @@ namespace Enemy.Controller
             EnemyView.DestroyEnemyTankPrefab();
             EnemyModel.ClearUpAllYourData();
             EnemyService.Instance.DestroyControllerAndModel();
-
         }
     }
 }

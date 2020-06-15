@@ -1,5 +1,4 @@
-﻿using System;
-using Bullet.View;
+﻿using Bullet.View;
 using Enemy.AttackingState;
 using Enemy.ChasingState;
 using Enemy.Controller;

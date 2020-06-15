@@ -1,8 +1,4 @@
-﻿//using System.Collections;
-//using System.Collections.Generic;
-//using UnityEngine;
-using Tank.ScriptableObjects;
-//using System;
+﻿using Tank.ScriptableObjects;
 
 namespace Tank.Model
 {
